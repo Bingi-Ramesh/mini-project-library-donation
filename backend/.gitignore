@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# dotenv environment variable file
+.env
+
+# Logs
+*.log
+
+# Debug folders
+.vscode/
+.idea/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# npm package lock file (optional, you can keep this if you want consistent dependency versions across environments)
+package-lock.json
+yarn.lock
+
+# Coverage directory (for code coverage tools like Jest)
+coverage/
+
+# Dist or build output (if any)
+dist/
+build/
+
+# OS files
+*.swp
+*.swo
