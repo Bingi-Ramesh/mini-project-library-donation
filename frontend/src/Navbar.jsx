@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, Box, useMediaQuery } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import logo from './assets/logo.jpg'
+import { Link } from "react-router-dom";
 const Navbar = () => {
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
+
+ 
 
   const toggleDrawer = (open) => {
     setDrawerOpen(open);
@@ -31,11 +35,11 @@ const Navbar = () => {
         <ListItem button onClick={() => setDrawerOpen(false)}>
           <ListItemText primary="Contact" />
         </ListItem>
-        <ListItem button onClick={() => setDrawerOpen(false)}>
-          <ListItemText primary="Login" />
+        <ListItem button component={Link} to="/login" onClick={() => setDrawerOpen(false)}>
+          <ListItemText primary="Login"   sx={{ color: 'white' }}/>
         </ListItem>
-        <ListItem button onClick={() => setDrawerOpen(false)}>
-          <ListItemText primary="Signup" />
+        <ListItem button component={Link} to="/signup"  onClick={() => setDrawerOpen(false)}>
+          <ListItemText  primary="Signup"   sx={{ color: 'white' }} />
         </ListItem>
       </List>
     </div>
@@ -68,7 +72,7 @@ const Navbar = () => {
             <Typography variant="h6" sx={{ marginRight: 5, color: "#ffffff" }}>
               LMS CONNECT
             </Typography>
-            <img src={logo} alt="Logo" style={{ height: 45 ,width:85,borderRadius:20}} />
+            <img src={logo} alt="Logo" style={{ height: 45, width: 85, borderRadius: 20 }} />
           </Box>
 
           {/* For Mobile: Hamburger Menu */}
@@ -95,11 +99,19 @@ const Navbar = () => {
             // For Larger Screens: Navbar Buttons
             <Box sx={{ display: "flex", gap: "20px" }}>
               <Button color="inherit">Home</Button>
-              
+
               <Button color="inherit">About</Button>
               <Button color="inherit">Contact</Button>
-              <Button color="inherit">Login</Button>
-              <Button color="inherit">Signup</Button>
+
+              <Button 
+              color="inherit"
+               component={Link} 
+               to="/login"
+               >Login</Button>
+              <Button color="inherit" component={Link} to="/signup">Signup</Button>
+
+             
+              
             </Box>
           )}
         </Toolbar>
