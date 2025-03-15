@@ -35,15 +35,15 @@ const Signup = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("YOUR_BACKEND_URL", formData, {
+            const response = await axios.post("http://localhost:5000/user/register", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-
-            if (response.data.otp) {
+console.log(response.data)
+            if (response.data.student.otp) {
                 // OTP received from backend, show OTP input modal
-                setOtp(response.data.otp);
+                setOtp(response.data.student.otp);
                 setShowOtpModal(true);
             } else {
                 alert("Signup successful");
@@ -64,7 +64,7 @@ const Signup = () => {
     };
 
     const handleOtpSubmit = () => {
-        if (otp === otpInput) {
+        if (otp == otpInput) {
             alert("Signup successful");
             setFormData({
                 name: "",

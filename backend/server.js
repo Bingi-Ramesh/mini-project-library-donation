@@ -1,22 +1,30 @@
-// backend/server.js
-
-require('dotenv').config();  // Load environment variables from .env file
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
+const userRouter = require('./routes/user.route.js');
+require('dotenv').config(); 
+
 const app = express();
+const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());              // Enable CORS
-app.use(express.json());      // Parse incoming JSON requests
+// Middleware setup
+app.use(express.json());  // To parse incoming JSON requests
+app.use(express.urlencoded({ extended: true }));  // To parse URL-encoded data (form submissions)
+app.use(cors());  // Enable CORS for all routes
 
+// MongoDB connection (without deprecated options)
+mongoose.connect(process.env.MONGODB_URL)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err.message);
+  });
 
-  
-app.get('/', (req, res) => {
-  res.send('Welcome to the Node.js Backend!');
-});
+// Routes
+app.use("/user", userRouter);
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
