@@ -38,7 +38,7 @@ const Navbar = () => {
         <ListItem button component={Link} to="/login" onClick={() => setDrawerOpen(false)}>
           <ListItemText primary="Login"   sx={{ color: 'white' }}/>
         </ListItem>
-        <ListItem button component={Link} to="/signup"  onClick={() => setDrawerOpen(false)}>
+        <ListItem button component={Link} to="/pre-signup"  onClick={() => setDrawerOpen(false)}>
           <ListItemText  primary="Signup"   sx={{ color: 'white' }} />
         </ListItem>
       </List>
@@ -108,7 +108,7 @@ const Navbar = () => {
                component={Link} 
                to="/login"
                >Login</Button>
-              <Button color="inherit" component={Link} to="/signup">Signup</Button>
+              <Button color="inherit" component={Link} to="/pre-signup">Signup</Button>
 
              
               

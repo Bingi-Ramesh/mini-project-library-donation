@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { Button, TextField, Box, Typography, MenuItem, Select, InputLabel, FormControl, Container, Paper, Modal, Link } from "@mui/material";
 import axios from "axios";
 import { Link as RouterLink } from "react-router-dom"; // Import the Link component from react-router-dom
-
-const Signup = () => {
+import { useNavigate } from 'react-router-dom';
+const Signupadmin = () => {
     const [formData, setFormData] = useState({
         name: "",
-        id: "",
         userType: "",
         email: "",
         password: "",
     });
-
+    const navigate = useNavigate();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState(null); // Store the OTP from the backend
     const [otpInput, setOtpInput] = useState(""); // Store the user-entered OTP
     const [showOtpModal, setShowOtpModal] = useState(false); // Show OTP input modal
+    const [finalUserData, setFinalUserData] = useState(null); // Store final user data after OTP verification
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -25,7 +25,7 @@ const Signup = () => {
             [name]: value,
         });
     };
-
+console.log(finalUserData)
     const handleOtpInputChange = (e) => {
         setOtpInput(e.target.value);
     };
@@ -35,12 +35,12 @@ const Signup = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:5000/user/register", formData, {
+            const response = await axios.post("http://localhost:5000/user/register-admin", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-console.log(response.data)
+            console.log(response.data);
             if (response.data.student.otp) {
                 // OTP received from backend, show OTP input modal
                 setOtp(response.data.student.otp);
@@ -49,7 +49,7 @@ console.log(response.data)
                 alert("Signup successful");
                 setFormData({
                     name: "",
-                    id: "",
+                   
                     userType: "",
                     email: "",
                     password: "",
@@ -63,19 +63,50 @@ console.log(response.data)
         }
     };
 
-    const handleOtpSubmit = () => {
+    const handleOtpSubmit = async () => {
         if (otp == otpInput) {
-            alert("Signup successful");
-            setFormData({
-                name: "",
-                id: "",
-                userType: "",
-                email: "",
-                password: "",
-            });
-            setOtp(null);
-            setOtpInput("");
-            setShowOtpModal(false);
+            alert("OTP verified successfully!");
+
+            // Store final user data excluding OTP
+            const userData = {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                userType:formData.userType,
+               
+            };
+
+            setFinalUserData(userData); // Set the final user data
+
+            try {
+                // Send the user data without OTP to the backend for final registration
+                const response = await axios.post("http://localhost:5000/user/verify-otp-admin", userData, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (response.data.message.includes("success")) {
+                    alert("Signup successful");
+                    setFormData({
+                        name: "",
+                        
+                        userType: "",
+                        email: "",
+                        password: "",
+                    });
+                    setOtp(null);
+                    setOtpInput("");
+                    setShowOtpModal(false);
+                    setError("")
+                    navigate("/login")
+                } else {
+                    setError("Signup failed. Please try again.");
+                }
+            } catch (error) {
+                setError("Network error, please try again.");
+                console.log(error)
+            }
         } else {
             setError("Invalid OTP, please try again.");
         }
@@ -83,20 +114,19 @@ console.log(response.data)
 
     return (
         <Container 
-        maxWidth="sm" 
-        sx={{ 
-            marginTop: 10, 
-            // Example gradient (orange-pink combination)
-            borderRadius: 2, // Optional: Add border radius if needed
-            padding: 3, // Optional: Padding to ensure content is not touching the edges
-        }}
-    >
-           <Paper sx={{
-    padding: 3, 
-    borderRadius: 5, 
-    boxShadow: 10, 
-    background: "linear-gradient(to right, #e0c3fc, #8ec5fc)", // Light blue gradient
-}}>
+            maxWidth="sm" 
+            sx={{ 
+                marginTop: 10, 
+                borderRadius: 2, 
+                padding: 3,
+            }}
+        >
+            <Paper sx={{
+                padding: 3, 
+                borderRadius: 5, 
+                boxShadow: 10, 
+                background: "linear-gradient(to right, #e0c3fc, #8ec5fc)", 
+            }}>
                 <Typography variant="h5" align="center" marginBottom={3} sx={{ color: '#3f51b5' }}>
                     Sign Up Form
                 </Typography>
@@ -118,22 +148,7 @@ console.log(response.data)
                         }}
                     />
 
-                    {/* ID Field */}
-                    <TextField
-                        label="ID"
-                        name="id"
-                        variant="outlined"
-                        fullWidth
-                        value={formData.id}
-                        onChange={handleInputChange}
-                        sx={{
-                            marginBottom: 2,
-                            "& .MuiOutlinedInput-root": {
-                                borderRadius: "15px",
-                                backgroundColor: "#fff3e0",
-                            },
-                        }}
-                    />
+                  
 
                     {/* User Type Dropdown */}
                     <FormControl fullWidth sx={{ marginBottom: 2 }}>
@@ -150,9 +165,8 @@ console.log(response.data)
                                 backgroundColor: "#fff3e0",
                             }}
                         >
-                            <MenuItem value="student">Student</MenuItem>
-                            <MenuItem value="staff">Staff</MenuItem>
                             <MenuItem value="admin">Admin</MenuItem>
+                          
                         </Select>
                     </FormControl>
 
@@ -202,33 +216,30 @@ console.log(response.data)
                     <Typography align="center" >
                         Already have an account?{" "}
                         <Link component={RouterLink} to="/login" sx={{ textDecoration: "none", color: '#3f51b5' }}>
-                        Login
-                    </Link>
+                            Login
+                        </Link>
                     </Typography>
                     {/* Submit Button */}
                     <Button
                         variant="contained"
                         type="submit"
                         fullWidth
-                        
                         disabled={loading}
                         sx={{
                             padding: 1.5,
                             borderRadius:"15px",
                             background: "linear-gradient(to right, #FF7043, #FF5722)",
                             "&:hover": {
-                                background: "linear-gradient(to right, #FF5722, #E64A19)", // Change gradient on hover
-                                transform: "scale(1.05)", // Slightly scale the button on hover
-                                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)", // Add shadow on hover
+                                background: "linear-gradient(to right, #FF5722, #E64A19)", 
+                                transform: "scale(1.05)", 
+                                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)", 
                             },
-                            transition: "all 0.3s ease", // Smooth transition for all properties (background, scale, box-shadow)
+                            transition: "all 0.3s ease", 
                         }}
                     >
                         {loading ? "Submitting..." : "Submit"}
                     </Button>
                 </form>
-
-
             </Paper>
 
             {/* OTP Modal */}
@@ -273,4 +284,4 @@ console.log(response.data)
     );
 };
 
-export default Signup;
+export default Signupadmin;

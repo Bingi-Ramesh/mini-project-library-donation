@@ -1,32 +1,32 @@
-const Student = require('../modals/student.modal.js'); // Import the Student model
-const { createMail } = require('../mail.js'); // Import the createMail function
+const Staff = require('../modals/staff.modal.js'); 
+const { createMail } = require('../mail.js'); 
 require('dotenv').config(); 
-const registerStudent = async (req, res) => {
+const registerStaff = async (req, res) => {
   try {
-    const { name, email, password,id} = req.body;
+    const { name, email, password} = req.body;
     console.log(name, email, password);
 
    
-    if (!name || !email || !password || !id) {
+    if (!name || !email || !password ) {
       return res.status(400).json({ error: 'Name, Email, and Password are required!' });
     }
 
-    // Check if student with the email already exists
-    const existingStudent = await Student.findOne({ email });
-    if (existingStudent) {
+    
+    const existingStaff= await Staff.findOne({ email });
+    if (existingStaff) {
       return res.status(400).json({ error: 'A student with this email already exists!' });
     }
 
-    // Generate OTP
+  
     const random6DigitNumber = Math.floor(100000 + Math.random() * 900000);
 
-    // Create the email content
+    
     const mail = createMail();
     mail.setTo(email);
     mail.setSubject('Email verification');
-    mail.setText(`please check your details Name:${name}, ID:${id} Email:${email} Your OTP to verify your email is ${random6DigitNumber}. Please do not share it with anyone.`);
+    mail.setText(` please check your details Name:${name},  Email:${email} Your OTP to verify your email is ${random6DigitNumber}. Please do not share it with anyone.`);
 
-    // Send email and handle possible errors
+    
     try {
       await mail.send();
     } catch (mailError) {
@@ -34,19 +34,19 @@ const registerStudent = async (req, res) => {
       return res.status(500).json({ error: 'Failed to send OTP. Please try again later.' });
     }
 
-    // If email is sent successfully, respond with success
+    
     res.status(200).json({
       message: 'OTP sent to the student successfully.',
       student: {
         name,
         email,
         password,
-        id,
-        otp: random6DigitNumber, // Returning the OTP in case the client needs it
+       
+        otp: random6DigitNumber, 
       },
     });
   } catch (err) {
-    // Handle unexpected errors
+    
     console.error(err);
     res.status(500).json({ error: 'Error registering student', message: err.message });
   }
@@ -55,41 +55,41 @@ const registerStudent = async (req, res) => {
 
 
 
-const signupStudent = async (req, res) => {
-  const { name, email, password,id ,userType} = req.body;
+const signupStaff = async (req, res) => {
+  const { name, email, password,userType} = req.body;
 
-  // Validate input fields
+  
  
   try {
 
-    if (!name || !email || !password || !id || !userType) {
+    if (!name || !email || !password || !userType) {
       return res.status(400).json({ error: 'All fields are required' });
   }
 
       // Check if user already exists
-      const existingUser = await Student.findOne({ email });
+      const existingUser = await Staff.findOne({ email });
       if (existingUser) {
           return res.status(400).json({ error: 'User with this email already exists' });
       }
 
       // Create a new student with the provided hashed password
-      const student = new Student({
+      const staff = new Staff({
           name,
           email,
           password, 
-          userType,
-          id, // Directly store the hashed password from the frontend
+          userType
+          // Directly store the hashed password from the frontend
       });
 
       // Save the student to the database
-      await student.save();
+      await staff.save();
 
       // Respond with success
       res.status(201).json({
           message: 'User successfully registered',
-          student: {
-              name: student.name,
-              email: student.email,
+          staff: {
+              name: staff.name,
+              email: staff.email,
           },
       });
   } catch (error) {
@@ -97,4 +97,4 @@ const signupStudent = async (req, res) => {
       res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
-module.exports = { registerStudent,signupStudent};
+module.exports = { registerStaff,signupStaff};

@@ -8,6 +8,15 @@ const studentSchema = new mongoose.Schema({
     required: true,
     trim: true,  // Remove leading and trailing spaces
   },
+  id: {
+    type: String,
+    required: true,
+    trim: true,  // Remove leading and trailing spaces
+  },
+  userType:{
+    type:String,
+    required:true
+  },
   email: {
     type: String,
     required: true,

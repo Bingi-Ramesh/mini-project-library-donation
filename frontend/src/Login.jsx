@@ -26,15 +26,25 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("YOUR_BACKEND_URL/login", formData, {
+            const response = await axios.post("http://localhost:5000/user/login", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
 
-            if (response.data.success) {
+            if (response.data.message.includes('success')) {
+                const { token, user } = response.data; // Destructure token and user data from the response
+
+                // Store the token and user details in localStorage
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(user)); // Store user details as a string
+
+                console.log("User details:", user); // Log the user details
+
                 alert("Login successful");
-                // Redirect or do something after successful login
+                setError("")
+                // Optionally, redirect to another page after successful login
+                // For example, you can use `history.push("/dashboard")` or `window.location.href = "/dashboard"`
             } else {
                 setError(response.data.message || "Invalid credentials.");
             }
