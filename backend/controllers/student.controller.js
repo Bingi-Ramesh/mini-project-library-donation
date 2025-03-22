@@ -8,13 +8,13 @@ const registerStudent = async (req, res) => {
 
    
     if (!name || !email || !password || !id) {
-      return res.status(400).json({ error: 'Name, Email, and Password are required!' });
+      return res.status(200).json({ error: 'Name, Email, and Password,id all are required!' });
     }
 
     // Check if student with the email already exists
     const existingStudent = await Student.findOne({ email });
     if (existingStudent) {
-      return res.status(400).json({ error: 'A student with this email already exists!' });
+      return res.status(200).json({ error: 'A student with this email already exists!' });
     }
 
     // Generate OTP
@@ -97,4 +97,25 @@ const signupStudent = async (req, res) => {
       res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
-module.exports = { registerStudent,signupStudent};
+
+
+const getStudents = async (req, res) => {
+  try {
+   
+    const students = await Student.find();  
+
+   
+    if (!students || students.length === 0) {
+      return res.status(200).json({ message: "No Students members found" });
+    }
+
+   
+    return res.status(200).json(students);
+    
+  } catch (error) {
+   
+    console.error(error);
+    return res.status(200).json({ message: "Internal server error..." });
+  }
+};
+module.exports = { registerStudent,signupStudent,getStudents};

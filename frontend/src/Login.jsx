@@ -3,13 +3,13 @@ import { Button, TextField, Box, Typography, Container, Paper, Link } from "@mui
 import axios from "axios";
 import { Link as RouterLink } from "react-router-dom"; // Import Link from react-router-dom
 import loginBg from './assets/asia-culturecenter-G92tQzil0dI-unsplash.jpg';
-
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
-
+const navigate=useNavigate()
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -43,13 +43,14 @@ const Login = () => {
 
                 alert("Login successful");
                 setError("")
+                navigate("/profile")
                 // Optionally, redirect to another page after successful login
                 // For example, you can use `history.push("/dashboard")` or `window.location.href = "/dashboard"`
             } else {
                 setError(response.data.message || "Invalid credentials.");
             }
         } catch (error) {
-            setError("Network error, please try again.");
+            setError("Wrong password try again");
             console.log(error);
         } finally {
             setLoading(false);
@@ -129,7 +130,7 @@ const Login = () => {
                             )}
                             <Typography align="center">
                                 Don't have an account?{" "}
-                                <Link component={RouterLink} to="/signup" sx={{ textDecoration: "none", color: "#3f51b5" }}>
+                                <Link component={RouterLink} to="/pre-signup" sx={{ textDecoration: "none", color: "#3f51b5" }}>
                                     Sign Up
                                 </Link>
                             </Typography>

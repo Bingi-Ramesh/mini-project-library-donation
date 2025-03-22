@@ -8,13 +8,13 @@ const registerAdmin = async (req, res) => {
 
    
     if (!name || !email || !password ) {
-      return res.status(400).json({ error: 'Name, Email, and Password are required!' });
+      return res.status(200).json({ error: 'Name, Email, and Password are required!' });
     }
 
     
     const existingAdmin= await Admin.findOne({ email });
     if (existingAdmin) {
-      return res.status(400).json({ error: 'A student with this email already exists!' });
+      return res.status(200).json({ error: 'An admin with this email already exists!' });
     }
 
   
@@ -91,7 +91,7 @@ const signupAdmin = async (req, res) => {
       });
   } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Server error. Please try again later.' });
+      res.status(200).json({ error: 'Server error. Please try again later.' });
   }
 };
 module.exports = { registerAdmin,signupAdmin};

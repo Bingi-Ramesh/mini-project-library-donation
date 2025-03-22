@@ -1,14 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, Box, useMediaQuery } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
-import logo from './assets/logo.jpg'
+import logo from './assets/logo.jpg';
 import { Link } from "react-router-dom";
-const Navbar = () => {
 
+const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [user, setUser] = useState(null); // Track the user state
   const isMobile = useMediaQuery("(max-width: 600px)");
 
- 
+  useEffect(() => {
+    // Function to fetch user from localStorage
+    const getUserFromLocalStorage = () => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(storedUser);
+    };
+
+    // Initially fetch user
+    getUserFromLocalStorage();
+
+    // Set an interval to check for changes in localStorage every 1 second
+    const intervalId = setInterval(() => {
+      getUserFromLocalStorage();
+    }, 1000);
+
+    // Cleanup the interval when component is unmounted
+    return () => clearInterval(intervalId);
+  }, []);
 
   const toggleDrawer = (open) => {
     setDrawerOpen(open);
@@ -17,14 +35,11 @@ const Navbar = () => {
   // Drawer Content
   const drawerContent = (
     <div style={{ width: 250, height: "100%", backgroundColor: "#009688", color: "#fff" }}>
-      {/* Close Button (X) */}
       <div style={{ padding: "10px", display: "flex", justifyContent: "flex-end" }}>
         <IconButton onClick={() => setDrawerOpen(false)} color="inherit">
           <CloseIcon />
         </IconButton>
       </div>
-
-      {/* Drawer Menu Items */}
       <List>
         <ListItem button onClick={() => setDrawerOpen(false)}>
           <ListItemText primary="Home" />
@@ -35,12 +50,21 @@ const Navbar = () => {
         <ListItem button onClick={() => setDrawerOpen(false)}>
           <ListItemText primary="Contact" />
         </ListItem>
-        <ListItem button component={Link} to="/login" onClick={() => setDrawerOpen(false)}>
-          <ListItemText primary="Login"   sx={{ color: 'white' }}/>
-        </ListItem>
-        <ListItem button component={Link} to="/pre-signup"  onClick={() => setDrawerOpen(false)}>
-          <ListItemText  primary="Signup"   sx={{ color: 'white' }} />
-        </ListItem>
+        {user ? (
+          // If user exists, show profile
+          <ListItem button component={Link} to="/profile" onClick={() => setDrawerOpen(false)}>
+            <ListItemText primary="Profile" />
+          </ListItem>
+        ) : (
+          <>
+            <ListItem button component={Link} to="/login" onClick={() => setDrawerOpen(false)}>
+              <ListItemText primary="Login" />
+            </ListItem>
+            <ListItem button component={Link} to="/pre-signup" onClick={() => setDrawerOpen(false)}>
+              <ListItemText primary="Signup" />
+            </ListItem>
+          </>
+        )}
       </List>
     </div>
   );
@@ -78,11 +102,9 @@ const Navbar = () => {
           {/* For Mobile: Hamburger Menu */}
           {isMobile ? (
             <>
-              {/* Hamburger Menu Icon */}
               <IconButton color="inherit" onClick={() => toggleDrawer(true)}>
                 <MenuIcon />
               </IconButton>
-              {/* Drawer */}
               <Drawer
                 anchor="right"
                 open={drawerOpen}
@@ -99,19 +121,24 @@ const Navbar = () => {
             // For Larger Screens: Navbar Buttons
             <Box sx={{ display: "flex", gap: "20px" }}>
               <Button color="inherit">Home</Button>
-
               <Button color="inherit">About</Button>
               <Button color="inherit">Contact</Button>
 
-              <Button 
-              color="inherit"
-               component={Link} 
-               to="/login"
-               >Login</Button>
-              <Button color="inherit" component={Link} to="/pre-signup">Signup</Button>
-
-             
-              
+              {user ? (
+                // Show Profile if user is logged in
+                <Button color="inherit" component={Link} to="/profile">
+                  Profile
+                </Button>
+              ) : (
+                <>
+                  <Button color="inherit" component={Link} to="/login">
+                    Login
+                  </Button>
+                  <Button color="inherit" component={Link} to="/pre-signup">
+                    Signup
+                  </Button>
+                </>
+              )}
             </Box>
           )}
         </Toolbar>

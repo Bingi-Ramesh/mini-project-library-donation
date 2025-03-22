@@ -35,14 +35,19 @@ console.log(finalUserData)
         setLoading(true);
 
         try {
+            formData.userType="staff"
             const response = await axios.post("http://localhost:5000/user/register-staff", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
             console.log(response.data);
-            if (response.data.student.otp) {
+            if(response.data.error){
+                setError(response.data.error)
+            }
+           else if (response.data.student.otp) {
                 // OTP received from backend, show OTP input modal
+                setError("")
                 setOtp(response.data.student.otp);
                 setShowOtpModal(true);
             } else {
@@ -151,24 +156,7 @@ console.log(finalUserData)
                   
 
                     {/* User Type Dropdown */}
-                    <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                        <InputLabel>User Type</InputLabel>
-                        <Select
-                            label="User Type"
-                            name="userType"
-                            value={formData.userType}
-                            onChange={handleInputChange}
-                            required
-                            sx={{
-                                marginBottom: 2,
-                                borderRadius: "15px",
-                                backgroundColor: "#fff3e0",
-                            }}
-                        >
-                            <MenuItem value="staff">Staff</MenuItem>
-                          
-                        </Select>
-                    </FormControl>
+                  
 
                     {/* Email Field */}
                     <TextField

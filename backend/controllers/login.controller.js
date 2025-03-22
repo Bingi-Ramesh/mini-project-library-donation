@@ -10,7 +10,7 @@ const login = async (req, res) => {
 
    
     if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide both email and password' });
+      return res.status(200).json({ message: 'Please provide both email and password' });
     }
 
     
@@ -18,13 +18,13 @@ const login = async (req, res) => {
     const staff = await Staff.findOne({ email });
     const admin = await Admin.findOne({ email });
     if (!student &&  !staff && !admin)  {
-      return res.status(404).json({ message: 'user  not found with this credentials' });
+      return res.status(200).json({ message: 'user  not found with this credentials' });
     }
 let token=""
     if(student!=null){
         const isMatch = await student.comparePassword(password);
         if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(200).json({ message: 'wrong password please try again' });
           }
          token = jwt.sign({ id: student._id, email: student.email, userType: student.userType }, 'your_jwt_secret_key', { expiresIn: '1h' });
 
@@ -33,7 +33,7 @@ let token=""
     if(staff!=null){
         const isMatch = await staff.comparePassword(password);
         if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(200).json({ message: 'wrong password please try again' });
           }
            token = jwt.sign({ id: staff._id, email: staff.email, userType: Staff.userType }, 'your_jwt_secret_key', { expiresIn: '1h' });
 
@@ -42,7 +42,7 @@ let token=""
     if(admin!=null){
         const isMatch = await admin.comparePassword(password);
         if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(200).json({ message: 'wrong password please try again' });
           }
            token = jwt.sign({ id: admin._id, email: admin.email, userType: admin.userType }, 'your_jwt_secret_key', { expiresIn: '1h' });
 

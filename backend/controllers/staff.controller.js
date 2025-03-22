@@ -8,13 +8,13 @@ const registerStaff = async (req, res) => {
 
    
     if (!name || !email || !password ) {
-      return res.status(400).json({ error: 'Name, Email, and Password are required!' });
+      return res.status(200).json({ error: 'Name, Email, and Password are required!' });
     }
 
     
     const existingStaff= await Staff.findOne({ email });
     if (existingStaff) {
-      return res.status(400).json({ error: 'A student with this email already exists!' });
+      return res.status(200).json({ error: 'A staff with this email already exists!' });
     }
 
   
@@ -36,7 +36,7 @@ const registerStaff = async (req, res) => {
 
     
     res.status(200).json({
-      message: 'OTP sent to the student successfully.',
+      message: 'OTP sent to the staff successfully.',
       student: {
         name,
         email,
@@ -48,7 +48,7 @@ const registerStaff = async (req, res) => {
   } catch (err) {
     
     console.error(err);
-    res.status(500).json({ error: 'Error registering student', message: err.message });
+    res.status(500).json({ error: 'Error registering staff', message: err.message });
   }
 };
 
@@ -97,4 +97,25 @@ const signupStaff = async (req, res) => {
       res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
-module.exports = { registerStaff,signupStaff};
+
+const getStaff = async (req, res) => {
+  try {
+   
+    const staff = await Staff.find();  
+
+   
+    if (!staff || staff.length === 0) {
+      return res.status(200).json({ message: "No staff members found" });
+    }
+
+   
+    return res.status(200).json(staff);
+    
+  } catch (error) {
+   
+    console.error(error);
+    return res.status(200).json({ message: "Internal server error..." });
+  }
+};
+
+module.exports = { registerStaff,signupStaff,getStaff};

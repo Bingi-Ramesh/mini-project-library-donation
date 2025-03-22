@@ -9,7 +9,9 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASSWORD
-  }
+  },
+  logger: true,  // Log all actions
+  debug: true, 
 });
 
 const createMail = () => {

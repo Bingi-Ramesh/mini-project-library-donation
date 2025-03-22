@@ -7,7 +7,7 @@ const Signup = () => {
     const [formData, setFormData] = useState({
         name: "",
         id: "",
-        userType: "",
+       userType:"",
         email: "",
         password: "",
     });
@@ -36,18 +36,23 @@ console.log(finalUserData)
         setLoading(true);
 
         try {
+            formData.userType="student"
             const response = await axios.post("http://localhost:5000/user/register", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
             console.log(response.data);
-            if (response.data.student.otp) {
+            if(response.data.error){
+                setError(response.data.error)
+            }
+            else if (response.data.student.otp) {
                 // OTP received from backend, show OTP input modal
+                setError("")
                 setOtp(response.data.student.otp);
                 setShowOtpModal(true);
             } else {
-                alert("Signup successful");
+                setError(response.data.error)
                 setFormData({
                     name: "",
                     id: "",
@@ -102,10 +107,11 @@ console.log(finalUserData)
                     setError("")
                     navigate("/login")
                 } else {
-                    setError("Signup failed. Please try again.");
+                    console.log(response.data)
+                    setError(response.data.error);
                 }
             } catch (error) {
-                setError("Network error, please try again.");
+                setError("network error");
                 console.log(error)
             }
         } else {
@@ -167,24 +173,7 @@ console.log(finalUserData)
                     />
 
                     {/* User Type Dropdown */}
-                    <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                        <InputLabel>User Type</InputLabel>
-                        <Select
-                            label="User Type"
-                            name="userType"
-                            value={formData.userType}
-                            onChange={handleInputChange}
-                            required
-                            sx={{
-                                marginBottom: 2,
-                                borderRadius: "15px",
-                                backgroundColor: "#fff3e0",
-                            }}
-                        >
-                            <MenuItem value="student">Student</MenuItem>
-                          
-                        </Select>
-                    </FormControl>
+                
 
                     {/* Email Field */}
                     <TextField
