@@ -78,4 +78,25 @@ const getAllBooks = async (req, res) => {
     }
   };
 
-module.exports = { registerBook,getAllBooks };
+  const deleteBook = async (req, res) => {
+    try {
+      const { bookId } = req.body;
+  
+      if (!bookId) {
+        return res.status(400).json({ success: false, message: 'Book ID is required' });
+      }
+  
+      const deletedBook = await Book.findByIdAndDelete(bookId);
+  
+      if (!deletedBook) {
+        return res.status(404).json({ success: false, message: 'Book not found' });
+      }
+  
+      res.status(200).json({ success: true, message: 'Book deleted successfully', deletedBook });
+    } catch (error) {
+      console.error('Error deleting book:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+    }
+  };
+  
+module.exports = { registerBook,getAllBooks ,deleteBook};

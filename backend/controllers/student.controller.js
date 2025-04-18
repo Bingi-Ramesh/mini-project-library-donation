@@ -118,4 +118,26 @@ const getStudents = async (req, res) => {
     return res.status(200).json({ message: "Internal server error..." });
   }
 };
-module.exports = { registerStudent,signupStudent,getStudents};
+
+const deleteStudent = async (req, res) => {
+  try {
+    const student = req.body;
+    const studentId=student._id
+
+    // Check if student exists
+    const existingStudent = await Student.findById(studentId);
+    if (!existingStudent) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    // Delete the student
+    await Student.findByIdAndDelete(studentId);
+
+    res.status(200).json({ message: 'Student deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting student:', error);
+    res.status(500).json({ error: 'Failed to delete student', message: error.message });
+  }
+};
+
+module.exports = { registerStudent,signupStudent,getStudents,deleteStudent};

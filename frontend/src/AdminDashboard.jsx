@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Button, CardActions, Avatar, Box, Grid, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import axios from 'axios';
 import { Person } from '@mui/icons-material'; // Import an icon for default avatars
-
+import { toast } from 'react-toastify';
 const AdminDashboard = () => {
   const [admin, setAdmin] = useState(null);
   const [staff, setStaff] = useState([]);
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
         console.error('Error fetching staff:', error);
       }
     };
-
+  
     const fetchStudents = async () => {
       try {
         const response = await axios.get('http://localhost:5000/user/get-students');
@@ -120,7 +120,35 @@ const AdminDashboard = () => {
       </div>
     );
   }
-
+  const handleRemoveStaff = async (staff) => {
+    try {
+      const response = await axios.post(`http://localhost:5000/user/delete-staff`,staff);
+      console.log(response)
+      // ✅ Success toast
+      toast.success('Staff removed successfully');
+  
+      // 🔄 Refresh staff list after deletion
+     
+    } catch (error) {
+      toast.error('Failed to remove staff');
+      console.error('Error removing staff:', error);
+    }
+  };
+  const handleRemoveStudent = async (student) => {
+    try {
+      const response = await axios.post(`http://localhost:5000/user/delete-student`,student);
+  console.log(response)
+      // ✅ Show success toast
+      toast.success('Student removed successfully');
+  
+      // 🔄 Update student list in UI
+     
+    } catch (error) {
+      toast.error('Failed to remove student');
+      console.error('Error removing student:', error);
+    }
+  };
+  
   return (
     <div style={{ padding: '20px', marginTop: '70px', backgroundColor: '#f0f4f8' }}>
       {/* Admin Details Section */}
@@ -159,24 +187,7 @@ const AdminDashboard = () => {
       {/* Action Buttons Section */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}>
         <Box mb={3} style={{ width: '100%', maxWidth: '450px' }}>
-          <Button
-            variant="contained"
-            fullWidth
-            style={{
-              backgroundColor: '#16a085',
-              color: 'white',
-              marginBottom: '15px',
-              padding: '15px 0',
-              borderRadius: '8px',
-              transition: '0.3s',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#1abc9c'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#16a085'}
-          >
-            Add Book
-          </Button>
+         
           <Button
             variant="contained"
             fullWidth
@@ -271,7 +282,7 @@ const AdminDashboard = () => {
               fontWeight: 'bold',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             }}
-           
+            onClick={() => handleRemoveStaff(staffMember)} // 💥 this sends the ID
             onMouseEnter={(e) => e.target.style.backgroundColor = '#9b59b6'}
             onMouseLeave={(e) => e.target.style.backgroundColor = '#8e44ad'}
           >
@@ -339,7 +350,7 @@ const AdminDashboard = () => {
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             }}
            
-         
+            onClick={() => handleRemoveStudent(student)} // 💥 this sends the ID
           >
             Remove Student 
           </Button>

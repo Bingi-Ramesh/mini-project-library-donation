@@ -118,4 +118,25 @@ const getStaff = async (req, res) => {
   }
 };
 
-module.exports = { registerStaff,signupStaff,getStaff};
+
+const deleteStaff = async (req, res) => {
+  try {
+    const staff = req.body;
+const staffId=staff._id
+    // Check if staff exists
+    const existingStaff = await Staff.findById(staffId);
+    if (!existingStaff) {
+      return res.status(404).json({ error: 'Staff not found' });
+    }
+
+    // Delete staff
+    await Staff.findByIdAndDelete(staffId);
+
+    res.status(200).json({ message: 'Staff deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting staff:', error);
+    res.status(500).json({ error: 'Failed to delete staff', message: error.message });
+  }
+};
+
+module.exports = { registerStaff,signupStaff,getStaff,deleteStaff};

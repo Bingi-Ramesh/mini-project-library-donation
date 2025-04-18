@@ -50,11 +50,26 @@ const Navbar = () => {
         <ListItem button onClick={() => setDrawerOpen(false)}>
           <ListItemText primary="Contact" />
         </ListItem>
+        
+        
         {user ? (
-          // If user exists, show profile
-          <ListItem button component={Link} to="/profile" onClick={() => setDrawerOpen(false)}>
-            <ListItemText primary="Profile" />
-          </ListItem>
+          <>
+            <ListItem button component={Link} to="/profile" onClick={() => setDrawerOpen(false)}>
+              <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem button component={Link} to="/books" onClick={() => setDrawerOpen(false)}>
+              <ListItemText primary="Books" />
+            </ListItem>
+            <ListItem button component={Link} to="/borrowals" onClick={() => setDrawerOpen(false)}>
+              <ListItemText primary="Borrowals" />
+            </ListItem>
+            
+            {user.userType === 'admin' && (
+              <ListItem button component={Link} to="/admin-dashboard" onClick={() => setDrawerOpen(false)}>
+                <ListItemText primary="Admin Dashboard" />
+              </ListItem>
+            )}
+          </>
         ) : (
           <>
             <ListItem button component={Link} to="/login" onClick={() => setDrawerOpen(false)}>
@@ -68,6 +83,7 @@ const Navbar = () => {
       </List>
     </div>
   );
+  
 
   return (
     <div style={{ margin: 0, padding: 0 }}>
@@ -120,26 +136,43 @@ const Navbar = () => {
           ) : (
             // For Larger Screens: Navbar Buttons
             <Box sx={{ display: "flex", gap: "20px" }}>
-              <Button color="inherit">Home</Button>
-              <Button color="inherit">About</Button>
-              <Button color="inherit">Contact</Button>
-
-              {user ? (
-                // Show Profile if user is logged in
+           <Button color="inherit" component={Link} to="/">
+                  Home
+                </Button>
+            <Button color="inherit">About</Button>
+            <Button color="inherit" component={Link} to="/contact">
+                  Contact
+                </Button>
+          
+            {user ? (
+              <>
                 <Button color="inherit" component={Link} to="/profile">
                   Profile
                 </Button>
-              ) : (
-                <>
-                  <Button color="inherit" component={Link} to="/login">
-                    Login
+                <Button color="inherit" component={Link} to="/books">
+                  Books
+                </Button>
+                <Button color="inherit" component={Link} to="/borrowals">
+                  Borrowals
+                </Button>
+                {user.userType === 'admin' && (
+                  <Button color="inherit" component={Link} to="/admin-dashboard">
+                    Admin Dashboard
                   </Button>
-                  <Button color="inherit" component={Link} to="/pre-signup">
-                    Signup
-                  </Button>
-                </>
-              )}
-            </Box>
+                )}
+              </>
+            ) : (
+              <>
+                <Button color="inherit" component={Link} to="/login">
+                  Login
+                </Button>
+                <Button color="inherit" component={Link} to="/pre-signup">
+                  Signup
+                </Button>
+              </>
+            )}
+          </Box>
+          
           )}
         </Toolbar>
       </AppBar>
