@@ -5,6 +5,7 @@ import logo from './assets/logo.jpg';
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState(null); // Track the user state
   const isMobile = useMediaQuery("(max-width: 600px)");

@@ -6,6 +6,7 @@ import loginBg from './assets/asia-culturecenter-G92tQzil0dI-unsplash.jpg';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const Login = () => {
+    const API_URL = import.meta.env.VITE_API_BASE;
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -27,7 +28,7 @@ const navigate=useNavigate()
         setLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:5000/user/login", formData, {
+            const response = await axios.post(`${API_URL}/user/login`, formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },

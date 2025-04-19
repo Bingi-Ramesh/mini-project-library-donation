@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Button, Avatar, Box, Paper } from '@mui/
 import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 

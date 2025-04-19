@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import signupbg from './assets/signup-bg.jpg';
 
 const PreSignUp = () => {
+    const API_URL = import.meta.env.VITE_API_BASE;
     return (
         // Outer Box with background image
         <Box

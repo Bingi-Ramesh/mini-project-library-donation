@@ -25,6 +25,7 @@ import banner2 from './assets/carousel2.webp';
 import banner3 from './assets/carousel3.jpg';
 
 const Home = () => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const [publicPosts, setPublicPosts] = useState([]);
   const sliderRef = useRef(null);
   const user = JSON.parse(localStorage.getItem('user')); // Get user from localStorage
@@ -32,7 +33,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPublicPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/user/get-all-public-posts');
+        const response = await axios.get(`${API_URL}/user/get-all-public-posts`);
         if (response.data.success && Array.isArray(response.data.posts)) {
           setPublicPosts(response.data.posts);
         } else {
@@ -48,7 +49,7 @@ const Home = () => {
 
   const handleDeletePost = async (postId) => {
     try {
-      const response = await axios.post('http://localhost:5000/user/delete-post', { postId });
+      const response = await axios.post(`${API_URL}/user/delete-post`, { postId });
       if (response.data.success) {
         setPublicPosts((prevPosts) => prevPosts.filter(post => post._id !== postId));
       } else {

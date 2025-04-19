@@ -14,6 +14,7 @@ import {
 import axios from 'axios';
 import {toast} from 'react-toastify'
 const Borrowals = () => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const [pendingRequests, setPendingRequests] = useState([]);
   const [borrowedRequests, setBorrowedRequests] = useState([]);
   const [renewalRequests, setRenewalRequests] = useState([]);
@@ -29,7 +30,7 @@ const Borrowals = () => {
   useEffect(() => {
     const fetchBorrowRequests = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/user/get-borrow-requests');
+        const response = await axios.get(`${API_URL}/user/get-borrow-requests`);
         const requests = response.data;
 
         if (isStudent) {
@@ -54,7 +55,7 @@ const Borrowals = () => {
 
   const handleAccept = async (requestId) => {
     try {
-      await axios.post('http://localhost:5000/user/accept-borrow-request', {
+      await axios.post(`${API_URL}/user/accept-borrow-request`, {
         borrowRequestId: requestId,
         status: 'borrowed',
       });
@@ -70,7 +71,7 @@ const Borrowals = () => {
 
   const handleCancel = async (requestId) => {
     try {
-      await axios.post('http://localhost:5000/user/cancel-borrow-request', {
+      await axios.post(`${API_URL}/user/cancel-borrow-request`, {
         borrowRequestId: requestId,
       });
 
@@ -104,7 +105,7 @@ const Borrowals = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/user/request-renewal', {
+      await axios.post(`${API_URL}/user/request-renewal`, {
         borrowRequestId: selectedRequest._id,
         renewalDays: days,
         status: 'renewal pending'
@@ -121,7 +122,7 @@ const Borrowals = () => {
 
   const handleAcceptRenewal = async (requestId) => {
     try {
-      await axios.post('http://localhost:5000/user/handle-renewal', {
+      await axios.post(`${API_URL}/user/handle-renewal`, {
         borrowRequestId: requestId,
         status: 'renewal accepted',
       });
@@ -134,7 +135,7 @@ const Borrowals = () => {
 
   const handleRejectRenewal = async (requestId) => {
     try {
-      await axios.post('http://localhost:5000/user/handle-renewal', {
+      await axios.post(`${API_URL}/user/handle-renewal`, {
         borrowRequestId: requestId,
         status: 'renewal rejected',
       });

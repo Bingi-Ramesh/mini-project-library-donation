@@ -16,6 +16,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const SingleBook = ({ book }) => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const {
     title,
     author,
@@ -46,7 +47,7 @@ const SingleBook = ({ book }) => {
     const fetchBorrowRequests = async () => {
       if (!isStudent) return;
       try {
-        const res = await axios.get(`http://localhost:5000/user/borrow-requests/${user._id}`);
+        const res = await axios.get(`${API_URL}/user/borrow-requests/${user._id}`);
         const hasRequested = res.data.some(
           (req) => req.book._id === bookId && req.status === 'pending'
         );
@@ -69,7 +70,7 @@ const SingleBook = ({ book }) => {
     }
 
     try {
-      await axios.post('http://localhost:5000/user/register-borrow-request', {
+      await axios.post(`${API_URL}/user/register-borrow-request`, {
         studentId: user._id,
         bookId,
         lendingDays: 30,
@@ -87,7 +88,7 @@ const SingleBook = ({ book }) => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.post(`http://localhost:5000/user/get-reviews`, { bookId });
+      const res = await axios.post(`${API_URL}/user/get-reviews`, { bookId });
       setReviews(res.data.reviews || []);
     } catch (err) {
       console.error('Error fetching reviews:', err);
@@ -102,7 +103,7 @@ const SingleBook = ({ book }) => {
     if (!reviewMsg.trim()) return;
 
     try {
-      await axios.post(`http://localhost:5000/user/add-review`, {
+      await axios.post(`${API_URL}/user/add-review`, {
         userName: user.name,
         bookId,
         message: reviewMsg,
@@ -119,7 +120,7 @@ const SingleBook = ({ book }) => {
 
   const handleDeleteReview = async (reviewId) => {
     try {
-      await axios.post(`http://localhost:5000/user/delete-review`, { reviewId });
+      await axios.post(`${API_URL}/user/delete-review`, { reviewId });
       toast.success('Review deleted!');
       fetchReviews(); // refresh
     } catch (err) {
@@ -134,7 +135,7 @@ const SingleBook = ({ book }) => {
       <Paper sx={{ display: 'flex', padding: '20px', boxShadow: 3, height: '100vh', flexDirection: { xs: 'column', md: 'row' } }}>
         <Box sx={{ flex: 2, marginRight: '20px', display: 'flex', alignItems: 'center' }}>
           <img
-            src={coverPhoto ? `http://localhost:5000${coverPhoto}` : 'default-cover.jpg'}
+            src={coverPhoto ? `${API_URL}${coverPhoto}` : 'default-cover.jpg'}
             alt={title}
             style={{
               width: '100%',

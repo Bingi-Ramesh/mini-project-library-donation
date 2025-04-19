@@ -5,6 +5,7 @@ import SingleBook from './SingleBook';
 import { toast } from 'react-toastify';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 const Books = () => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const [bookRequests, setBookRequests] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
@@ -46,7 +47,7 @@ const Books = () => {
   };
   const fetchBooks = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/user/get-books'); // Replace with your actual API
+      const response = await axios.get(`${API_URL}/user/get-books`); // Replace with your actual API
       console.log(response.data);
       setBooks(response.data.books);
       setFilteredBooks(response.data.books);  // Initially set filtered books to all books
@@ -56,7 +57,7 @@ const Books = () => {
   };
   const fetchBookRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/user/get-all-book-requests'); // Replace with the actual API endpoint for book requests
+      const response = await axios.get(`${API_URL}/get-all-book-requests`); // Replace with the actual API endpoint for book requests
       setBookRequests(response.data.requests);  // Assuming the backend response has a "requests" array
     } catch (error) {
       console.error('Error fetching book requests:', error);
@@ -71,7 +72,7 @@ const Books = () => {
   }, []);
   const handleRemoveBook = async (bookId) => {
     try {
-      await axios.post('http://localhost:5000/user/delete-book', { bookId });
+      await axios.post(`${API_URL}/user/delete-book`, { bookId });
 toast.success("Book removed successfully.")
    //   alert('Book removed successfully.');
       // Optionally refresh your book list here
@@ -151,7 +152,7 @@ toast.success("Book removed successfully.")
       requestDetails.requestedBy=user._id
       requestDetails.name=user.name
       console.log(requestDetails)
-      await axios.post('http://localhost:5000/user/register-book-request', requestDetails);
+      await axios.post(`${API_URL}/user/register-book-request`, requestDetails);
      // alert('Your request has been submitted to the staff.');
      toast.success("Your request has been submitted to the staff.")
       setRequestDetails({
@@ -182,10 +183,10 @@ toast.success("Book removed successfully.")
       };
   
       try {
-        await axios.post('http://localhost:5000/user/post-to-public', data);
+        await axios.post(`${API_URL}/user/post-to-public`, data);
   
         // New backend call to update status
-        await axios.post('http://localhost:5000/user/update-book-request-status', {
+        await axios.post(`${API_URL}/user/update-book-request-status`, {
           requestId,
           status: 'posted',
         });
@@ -201,7 +202,7 @@ toast.success("Book removed successfully.")
   
     const handleCancelRequest = async (requestId) => {
       try {
-        await axios.post('http://localhost:5000/user/cancel-book-request', { requestId });
+        await axios.post(`${API_URL}/user/cancel-book-request`, { requestId });
        // alert('Book request has been cancelled.');
        toast.success("Book request has been cancelled.")
         // You might want to update local state here too
@@ -306,7 +307,7 @@ toast.success("Book removed successfully.")
     }
 
     try {
-      await axios.post('http://localhost:5000/user/register-books', formData, {
+      await axios.post(`${API_URL}/user/register-books`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -384,7 +385,7 @@ toast.success("Book removed successfully.")
                   <CardContent>
                     {book.coverPhoto && (
                       <img
-                        src={`http://localhost:5000${book.coverPhoto}`}
+                        src={`${API_URL}${book.coverPhoto}`}
                         alt={book.title}
                         style={{
                           width: '100%',

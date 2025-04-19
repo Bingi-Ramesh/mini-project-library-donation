@@ -5,6 +5,7 @@ import { Link as RouterLink } from "react-router-dom"; // Import the Link compon
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-toastify'
 const Signupadmin = () => {
+    const API_URL = import.meta.env.VITE_API_BASE;
     const [formData, setFormData] = useState({
         name: "",
         userType: "",
@@ -37,7 +38,7 @@ console.log(finalUserData)
 
         try {
             formData.userType="admin"
-            const response = await axios.post("http://localhost:5000/user/register-admin", formData, {
+            const response = await axios.post(`${API_URL}/user/register-admin`, formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -86,7 +87,7 @@ console.log(finalUserData)
 
             try {
                 // Send the user data without OTP to the backend for final registration
-                const response = await axios.post("http://localhost:5000/user/verify-otp-admin", userData, {
+                const response = await axios.post(`${API_URL}/user/verify-otp-admin`, userData, {
                     headers: {
                         "Content-Type": "application/json",
                     },
