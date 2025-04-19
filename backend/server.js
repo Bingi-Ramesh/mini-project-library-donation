@@ -24,6 +24,9 @@ mongoose.connect(process.env.MONGODB_URL)
 
 // Routes
 app.use("/user", userRouter);
+app.get('/', (req, res) => {
+  res.send('API is live!');
+});
 
 // Start the server
 app.listen(port, () => {
