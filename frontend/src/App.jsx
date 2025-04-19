@@ -1,4 +1,5 @@
 // src/App.jsx
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import BrowserRouter, Route, and Routes
 import Navbar from './Navbar';
@@ -8,6 +9,7 @@ import Signupstaff from './Signup-staff';
 import Signupadmin from './Signup-admin';
 import PreSignUp from './PreSignUp';
 import Profile from './Profile';
+
 import AdminDashboard from './AdminDashboard';
 import Books from './Books';
 import Borrowals from './Borrowals';
@@ -21,6 +23,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import About from './About';
 import Footer from './Footer';
 function App() {
+  const API_URL = import.meta.env.VITE_API_BASE;
+
+  console.log(API_URL)
   return (
     <>
       <ToastContainer position="top-right" autoClose={3000} />

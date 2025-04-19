@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Person } from '@mui/icons-material'; // Import an icon for default avatars
 import { toast } from 'react-toastify';
 const AdminDashboard = () => {
+  const API_URL = import.meta.env.VITE_API_BASE;
   const [admin, setAdmin] = useState(null);
   const [staff, setStaff] = useState([]);
   const [students, setStudents] = useState([]);
@@ -39,7 +40,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStaff = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/user/get-staff');
+        const response = await axios.get(`${API_URL}/user/get-staff`);
         console.log('Fetched staff:', response.data); // Log the response
         if (Array.isArray(response.data)) {
           setStaff(response.data);
@@ -53,7 +54,7 @@ const AdminDashboard = () => {
   
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/user/get-students');
+        const response = await axios.get(`${API_URL}/user/get-students`);
         console.log('Fetched students:', response.data); // Log the response
         if (Array.isArray(response.data)) {
           setStudents(response.data);
@@ -74,7 +75,7 @@ const AdminDashboard = () => {
   // Handle adding staff
   const handleAddStaff = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/user/verify-otp-staff', newStaff);
+      const response = await axios.post(`${API_URL}/user/verify-otp-staff`, newStaff);
       console.log('Staff added:', response.data);
       setOpenDialog(false);
     } catch (error) {
@@ -86,7 +87,7 @@ const AdminDashboard = () => {
   const handleAddStudent = async () => {
     try {
         console.log(newStudent)
-      const response = await axios.post('http://localhost:5000/user/verify-otp', newStudent);
+      const response = await axios.post(`${API_URL}/user/verify-otp`, newStudent);
       console.log('Student added:', response.data);
       setOpenStudentDialog(false); // Close the "Add Student" dialog
     } catch (error) {
@@ -122,7 +123,7 @@ const AdminDashboard = () => {
   }
   const handleRemoveStaff = async (staff) => {
     try {
-      const response = await axios.post(`http://localhost:5000/user/delete-staff`,staff);
+      const response = await axios.post(`${API_URL}/user/delete-staff`,staff);
       console.log(response)
       // ✅ Success toast
       toast.success('Staff removed successfully');
@@ -136,7 +137,7 @@ const AdminDashboard = () => {
   };
   const handleRemoveStudent = async (student) => {
     try {
-      const response = await axios.post(`http://localhost:5000/user/delete-student`,student);
+      const response = await axios.post(`${API_URL}/user/delete-student`,student);
   console.log(response)
       // ✅ Show success toast
       toast.success('Student removed successfully');

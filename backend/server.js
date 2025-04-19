@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));  // To parse URL-encoded data (
 app.use(cors());  // Enable CORS for all routes
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // MongoDB connection (without deprecated options)
+console.log(process.env.MONGODB_URL)
 mongoose.connect(process.env.MONGODB_URL)
   .then(() => {
     console.log('Connected to MongoDB');
