@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGODB_URL)
 // Routes
 app.use("/user", userRouter);
 app.get('/', (req, res) => {
-  res.send('API is live!');
+  res.send(`API is lives!${process.env.MONGODB_URL}`);
 });
 
 // Start the server
