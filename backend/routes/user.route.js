@@ -8,7 +8,8 @@ const router = express.Router();
 const upload=require('../middleware/multer.js');
 const { createBorrowRequest, getAllBorrowRequests, acceptBorrowRequest, createRenewalRequest, handleRenewal } = require('../controllers/borrowRequest.controller.js');
 const { createBookRequest, getAllBookRequests, deleteBookRequest, updateBookRequestStatus } = require('../controllers/bookRequest.controller.js');
-const { createPublicPost, getAllPublicPosts } = require('../controllers/publicPost.controller.js');
+const { createPublicPost, getAllPublicPosts, deletePublicPost } = require('../controllers/publicPost.controller.js');
+const { addReview, getReviewsByBookId, deleteReview } = require('../controllers/review.controller.js');
 
 
 
@@ -37,5 +38,9 @@ router.post('/cancel-book-request',deleteBookRequest)
 router.get('/get-all-book-requests',getAllBookRequests)
 router.post('/post-to-public',createPublicPost)
 router.get('/get-all-public-posts',getAllPublicPosts)
+router.post('/delete-post',deletePublicPost)
 router.post('/update-book-request-status',updateBookRequestStatus)
+router.post('/add-review',addReview)
+router.post('/get-reviews',getReviewsByBookId)
+router.post('/delete-review',deleteReview)
 module.exports = router;

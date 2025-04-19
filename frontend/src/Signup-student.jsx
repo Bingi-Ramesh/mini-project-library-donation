@@ -3,6 +3,7 @@ import { Button, TextField, Box, Typography, MenuItem, Select, InputLabel, FormC
 import axios from "axios";
 import { Link as RouterLink } from "react-router-dom"; // Import the Link component from react-router-dom
 import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
 const Signup = () => {
     const [formData, setFormData] = useState({
         name: "",
@@ -71,7 +72,8 @@ console.log(finalUserData)
 
     const handleOtpSubmit = async () => {
         if (otp == otpInput) {
-            alert("OTP verified successfully!");
+           // alert("OTP verified successfully!");
+           toast.success("OTP verified successfully")
 
             // Store final user data excluding OTP
             const userData = {
@@ -93,7 +95,8 @@ console.log(finalUserData)
                 });
 
                 if (response.data.message.includes("success")) {
-                    alert("Signup successful");
+                  //  alert("Signup successful");
+                  toast.success("SignUp successful")
                     setFormData({
                         name: "",
                         id: "",

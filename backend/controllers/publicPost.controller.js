@@ -38,7 +38,29 @@ const getAllPublicPosts = async (req, res) => {
   }
 };
 
+const deletePublicPost = async (req, res) => {
+  try {
+    const { postId } = req.body;
+
+    if (!postId) {
+      return res.status(400).json({ success: false, message: 'Post ID is required.' });
+    }
+
+    const deletedPost = await PublicPost.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res.status(404).json({ success: false, message: 'Post not found.' });
+    }
+
+    res.status(200).json({ success: true, message: 'Public post deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting public post:', error);
+    res.status(500).json({ success: false, message: 'Server error while deleting public post.' });
+  }
+};
+
 module.exports = {
   createPublicPost,
-  getAllPublicPosts
+  getAllPublicPosts,
+  deletePublicPost
 };

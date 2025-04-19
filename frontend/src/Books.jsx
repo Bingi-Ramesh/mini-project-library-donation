@@ -35,6 +35,7 @@ const Books = () => {
    
     if (user && user.userType === 'admin') {
       setIsAdmin(true);
+      console.log(isAdmin)
     }
 
     // Fetch books from the backend
@@ -273,16 +274,17 @@ toast.success("Book removed successfully.")
               )}
             </TableBody>
           </Table>
-        </TableContainer>
-  
-        {/* Show More / Show Less Toggle */}
-        {pendingRequests.length > 4 && (
+          {pendingRequests.length > 4 && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <Button variant="text" onClick={() => setShowAll(!showAll)}>
               {showAll ? 'Show Less' : 'Show More'}
             </Button>
           </Box>
         )}
+        </TableContainer>
+  
+        {/* Show More / Show Less Toggle */}
+       
       </>
     );
   };
@@ -335,7 +337,7 @@ toast.success("Book removed successfully.")
      
 
       {/* Conditionally render Add Books button if the user is an admin */}
-      {isAdmin && !selectedBook && (
+      {!isStudent && !selectedBook && (
         <Button variant="contained" color="secondary" onClick={handleDialogOpen}>
           Add Book
         </Button>
@@ -354,6 +356,7 @@ toast.success("Book removed successfully.")
 
       {/* Display books or a message if no books are available */}
       <Grid container spacing={4} marginTop={2}>
+        <br />
       {selectedBook ? (
         <SingleBook book={selectedBook} />  
       ) : (
@@ -370,6 +373,7 @@ toast.success("Book removed successfully.")
                   sx={{
                     boxShadow: 3,
                     borderRadius: 2,
+                    marginLeft:4,
                     transition: 'transform 0.3s ease-in-out',
                     '&:hover': {
                       transform: 'scale(1.05)',

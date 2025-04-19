@@ -12,7 +12,7 @@ import {
   TextField
 } from '@mui/material';
 import axios from 'axios';
-
+import {toast} from 'react-toastify'
 const Borrowals = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [borrowedRequests, setBorrowedRequests] = useState([]);
@@ -98,7 +98,8 @@ const Borrowals = () => {
   const handleRenewalSubmit = async () => {
     const days = parseInt(renewDays);
     if (isNaN(days) || days <= 0 || days > 30) {
-      alert('Please enter a valid number of days (1-30).');
+      // alert('Please enter a valid number of days (1-30).');
+      toast.error("Please enter a valid number of days (1-30).")
       return;
     }
 
@@ -109,7 +110,8 @@ const Borrowals = () => {
         status: 'renewal pending'
       });
 
-      alert('Renewal request sent!');
+     // alert('Renewal request sent!');
+     toast.success("Renewal Request sent")
       setOpenRenewDialog(false);
       setRenewDays('');
     } catch (error) {
@@ -160,8 +162,9 @@ const Borrowals = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                 {isStaffOrAdmin && (
                   <>
-                    <Button variant="contained" color="primary" size="small" onClick={() => handleAccept(request._id)}>Accept</Button>
-                    <Button variant="outlined" color="error" size="small" onClick={() => handleCancel(request._id)}>Cancel</Button>
+                  
+                    <Button variant="contained" color="success" size="small" sx={{mr:2}} onClick={() => handleAccept(request._id)}>Accept</Button>
+                    <Button variant="contained" color="error" size="small"  onClick={() => handleCancel(request._id)}>Cancel</Button>
                   </>
                 )}
                 <Button variant="text" size="small" onClick={() => handleShowMore(request)}>Show More</Button>
@@ -206,7 +209,7 @@ const Borrowals = () => {
                 {isStaffOrAdmin && request.status === 'renewal pending' && (
                   <>
                     <Button variant="contained" color="success" size="small" onClick={() => handleAcceptRenewal(request._id)}>Accept</Button>
-                    <Button variant="outlined" color="error" size="small" onClick={() => handleRejectRenewal(request._id)}>Reject</Button>
+                    <Button variant="contained" color="error" size="small" onClick={() => handleRejectRenewal(request._id)}>Reject</Button>
                   </>
                 )}
                 {isStudent && (

@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link as RouterLink } from "react-router-dom"; // Import Link from react-router-dom
 import loginBg from './assets/asia-culturecenter-G92tQzil0dI-unsplash.jpg';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const Login = () => {
     const [formData, setFormData] = useState({
         email: "",
@@ -41,12 +42,14 @@ const navigate=useNavigate()
 
                 console.log("User details:", user); // Log the user details
 
-                alert("Login successful");
+               // alert("Login successful");
+                toast.success("Login Successful")
                 setError("")
                 navigate("/profile")
                 // Optionally, redirect to another page after successful login
                 // For example, you can use `history.push("/dashboard")` or `window.location.href = "/dashboard"`
             } else {
+               
                 setError(response.data.message || "Invalid credentials.");
             }
         } catch (error) {

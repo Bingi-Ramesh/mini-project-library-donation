@@ -18,6 +18,8 @@ import Contact from './Contact';
 // import Contact from './Contact'; // Assuming you have a Contact component
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import About from './About';
+import Footer from './Footer';
 function App() {
   return (
     <>
@@ -29,6 +31,7 @@ function App() {
        
       <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/borrowals" element={<Borrowals />} />
         <Route path="/pre-signup" element={<PreSignUp />} />
@@ -43,6 +46,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/" element={<Home />} /> */}
       </Routes>
+      <Footer />
     </Router>
     </>
   );
