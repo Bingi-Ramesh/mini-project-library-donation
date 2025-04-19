@@ -5,6 +5,7 @@ import { Person } from '@mui/icons-material'; // Import an icon for default avat
 import { toast } from 'react-toastify';
 const AdminDashboard = () => {
   const API_URL = import.meta.env.VITE_API_BASE;
+  console.log(API_URL)
   const [admin, setAdmin] = useState(null);
   const [staff, setStaff] = useState([]);
   const [students, setStudents] = useState([]);
