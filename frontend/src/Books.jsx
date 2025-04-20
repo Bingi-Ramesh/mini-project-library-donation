@@ -57,7 +57,7 @@ const Books = () => {
   };
   const fetchBookRequests = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get-all-book-requests`); // Replace with the actual API endpoint for book requests
+      const response = await axios.get(`${API_URL}/user/get-all-book-requests`); // Replace with the actual API endpoint for book requests
       setBookRequests(response.data.requests);  // Assuming the backend response has a "requests" array
     } catch (error) {
       console.error('Error fetching book requests:', error);

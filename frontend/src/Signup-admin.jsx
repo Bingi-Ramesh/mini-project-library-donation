@@ -11,6 +11,7 @@ const Signupadmin = () => {
         userType: "",
         email: "",
         password: "",
+        adminPassword:""
     });
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -38,6 +39,10 @@ console.log(finalUserData)
 
         try {
             formData.userType="admin"
+            if(formData.adminPassword!=='Rammani'){
+                setError("Invalid admin password")
+                return
+            }
             const response = await axios.post(`${API_URL}/user/register-admin`, formData, {
                 headers: {
                     "Content-Type": "application/json",
@@ -102,6 +107,7 @@ console.log(finalUserData)
                         userType: "",
                         email: "",
                         password: "",
+                        adminPassword:"",
                     });
                     setOtp(null);
                     setOtpInput("");
@@ -196,7 +202,22 @@ console.log(finalUserData)
                             },
                         }}
                     />
-
+                     <TextField
+                        label="Admin Password"
+                        name="adminPassword"
+                        type="password"
+                        variant="outlined"
+                        fullWidth
+                        value={formData.adminPassword}
+                        onChange={handleInputChange}
+                        sx={{
+                            marginBottom: 2,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "15px",
+                                backgroundColor: "#fff3e0",
+                            },
+                        }}
+                    />
                     {/* Error Message */}
                     {error && (
                         <Typography color="error" variant="body2" align="center" marginBottom={2}>
