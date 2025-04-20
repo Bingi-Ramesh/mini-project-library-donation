@@ -11,6 +11,7 @@ const Signupstaff = () => {
         userType: "",
         email: "",
         password: "",
+        staffPassword:"",
     });
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -38,6 +39,11 @@ console.log(finalUserData)
 
         try {
             formData.userType="staff"
+            if(formData.staffPassword!=="Maniram"){
+                setError("Invalid Staff Password")
+                return
+            }
+
             const response = await axios.post(`${API_URL}/user/register-staff`, formData, {
                 headers: {
                     "Content-Type": "application/json",
@@ -61,6 +67,7 @@ console.log(finalUserData)
                     userType: "",
                     email: "",
                     password: "",
+                    staffPassword:""
                 });
             }
         } catch (error) {
@@ -189,6 +196,22 @@ console.log(finalUserData)
                         variant="outlined"
                         fullWidth
                         value={formData.password}
+                        onChange={handleInputChange}
+                        sx={{
+                            marginBottom: 2,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "15px",
+                                backgroundColor: "#fff3e0",
+                            },
+                        }}
+                    />
+                    <TextField
+                        label="Staff Password"
+                        name="staffPassword"
+                        type="password"
+                        variant="outlined"
+                        fullWidth
+                        value={formData.staffPassword}
                         onChange={handleInputChange}
                         sx={{
                             marginBottom: 2,
