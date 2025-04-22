@@ -204,13 +204,14 @@ const Borrowals = () => {
               <Button
                 onClick={async () => {
                   try {
-                    await axios.post(`${API_URL}/user/request-renewal`, {
+                    await axios.post(`${API_URL}/user/handle-renewal`, {
                       borrowRequestId: req.id,
                       status: "return request accepted"
                     });
                     // Optionally refresh or update the state
-                    console.log("Accepted:", req.id);
+                    toast.success("Accepted return successfully")
                   } catch (error) {
+                    toast.error("error while accepting return ")
                     console.error("Accept error:", error);
                   }
                 }}
@@ -221,13 +222,15 @@ const Borrowals = () => {
                 color="error"
                 onClick={async () => {
                   try {
-                    await axios.post(`${API_URL}/user/request-renewal`, {
+                    await axios.post(`${API_URL}/user/handle-renewal`, {
                       borrowRequestId: req.id,
                       status: "return request rejected"
                     });
                     // Optionally refresh or update the state
+                    toast.success("Rejected successfully")
                     console.log("Rejected:", req.id);
                   } catch (error) {
+                    toast.error("Error while rejecting")
                     console.error("Reject error:", error);
                   }
                 }}
