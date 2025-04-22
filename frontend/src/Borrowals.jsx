@@ -172,13 +172,17 @@ const Borrowals = () => {
 
   return (
     <>
+  
+
+    <Box sx={{ padding: '20px', marginTop: '50px' }}>
     {isStaffOrAdmin && (
   <>
+  <h2>Pending Return Requests</h2>
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>Request ID</TableCell>
-          <TableCell>User</TableCell>
+          <TableCell>Student Name</TableCell>
+          <TableCell>Book Name</TableCell>
           <TableCell>Status</TableCell>
           <TableCell>Actions</TableCell>
         </TableRow>
@@ -186,8 +190,8 @@ const Borrowals = () => {
       <TableBody>
         {requests.map((req) => (
           <TableRow key={req.id}>
-            <TableCell>{req.id}</TableCell>
-            <TableCell>{req.user}</TableCell>
+            <TableCell>{req.student.name}</TableCell>
+            <TableCell>{req.book.title}</TableCell>
             <TableCell>{req.status}</TableCell>
             <TableCell>
               <Button
@@ -230,8 +234,6 @@ const Borrowals = () => {
     </Table>
   </>
 )}
-
-    <Box sx={{ padding: '20px', marginTop: '50px' }}>
       <Typography variant="h4" sx={{ marginBottom: '20px' }}>Borrow Requests</Typography>
 
       {/* Pending Requests */}
