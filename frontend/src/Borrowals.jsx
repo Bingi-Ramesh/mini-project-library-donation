@@ -38,7 +38,7 @@ const Borrowals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${API_URL}/user/get-borror-requests`);
+        const res = await axios.get(`${API_URL}/user/get-borrow-requests`);
         const filtered = res.data.filter(
           (req) => req.status.toLowerCase().includes("return") && req.status.toLowerCase().includes("pending")
         );
