@@ -15,6 +15,8 @@ import axios from 'axios';
 import {toast} from 'react-toastify'
 const Borrowals = () => {
   const API_URL = import.meta.env.VITE_API_BASE;
+  const [requests, setRequests] = useState([]);
+
   const [pendingRequests, setPendingRequests] = useState([]);
   const [borrowedRequests, setBorrowedRequests] = useState([]);
   const [renewalRequests, setRenewalRequests] = useState([]);
@@ -26,7 +28,21 @@ const Borrowals = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const isStaffOrAdmin = user && (user.userType === 'staff' || user.userType === 'admin');
   const isStudent = user && user.userType === 'student';
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/user/get-borror-requests`);
+        const filtered = res.data.filter(
+          (req) => req.status.toLowerCase().includes("return") && req.status.toLowerCase().includes("pending")
+        );
+        setRequests(filtered);
+      } catch (err) {
+        console.error("Failed to fetch requests", err);
+      }
+    };
+    fetchData();
+  }, []);
+  
   useEffect(() => {
     const fetchBorrowRequests = async () => {
       try {
@@ -53,6 +69,7 @@ const Borrowals = () => {
     }
   }, [user]);
 
+  
   const handleAccept = async (requestId) => {
     try {
       await axios.post(`${API_URL}/user/accept-borrow-request`, {
@@ -99,7 +116,7 @@ const Borrowals = () => {
   const handleRenewalSubmit = async () => {
     const days = parseInt(renewDays);
     if (isNaN(days) || days <= 0 || days > 30) {
-      // alert('Please enter a valid number of days (1-30).');
+     
       toast.error("Please enter a valid number of days (1-30).")
       return;
     }
@@ -147,6 +164,66 @@ const Borrowals = () => {
   };
 
   return (
+    <>
+    {isStaffOrAdmin && (
+  <>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Request ID</TableCell>
+          <TableCell>User</TableCell>
+          <TableCell>Status</TableCell>
+          <TableCell>Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {requests.map((req) => (
+          <TableRow key={req.id}>
+            <TableCell>{req.id}</TableCell>
+            <TableCell>{req.user}</TableCell>
+            <TableCell>{req.status}</TableCell>
+            <TableCell>
+              <Button
+                onClick={async () => {
+                  try {
+                    await axios.post(`${API_URL}/user/request-renewal`, {
+                      requestId: req.id,
+                      status: "return request accepted"
+                    });
+                    // Optionally refresh or update the state
+                    console.log("Accepted:", req.id);
+                  } catch (error) {
+                    console.error("Accept error:", error);
+                  }
+                }}
+              >
+                Accept
+              </Button>
+              <Button
+                color="error"
+                onClick={async () => {
+                  try {
+                    await axios.post(`${API_URL}/user/request-renewal`, {
+                      requestId: req.id,
+                      status: "return request rejected"
+                    });
+                    // Optionally refresh or update the state
+                    console.log("Rejected:", req.id);
+                  } catch (error) {
+                    console.error("Reject error:", error);
+                  }
+                }}
+              >
+                Reject
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </>
+)}
+
     <Box sx={{ padding: '20px', marginTop: '50px' }}>
       <Typography variant="h4" sx={{ marginBottom: '20px' }}>Borrow Requests</Typography>
 
@@ -164,8 +241,10 @@ const Borrowals = () => {
                 {isStaffOrAdmin && (
                   <>
                   
-                    <Button variant="contained" color="success" size="small" sx={{mr:2}} onClick={() => handleAccept(request._id)}>Accept</Button>
-                    <Button variant="contained" color="error" size="small"  onClick={() => handleCancel(request._id)}>Cancel</Button>
+                    <Button variant="contained" color="success" size="small" sx={{mr:2}} 
+                    onClick={() => handleAccept(request._id)}>Accept</Button>
+                    <Button variant="contained" color="error" size="small"  
+                    onClick={() => handleCancel(request._id)}>Cancel</Button>
                   </>
                 )}
                 <Button variant="text" size="small" onClick={() => handleShowMore(request)}>Show More</Button>
@@ -187,7 +266,23 @@ const Borrowals = () => {
               <Typography variant="body2" color="text.secondary">Status: {request.status}</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                 {isStudent && (
+                  <>
                   <Button variant="outlined" color="secondary" size="small" onClick={() => handleRenewalRequest(request)}>Renew</Button>
+                  <Button variant="outlined" color="secondary" size="small" onClick={async () => {
+  try {
+    await axios.post(`${API_URL}/user/request-renewal`, {
+      borrowRequestId: request._id,
+      status: 'return request pending'
+    });
+    // Optionally show a success message or update UI
+    toast.success("Return request sent successfully")
+  } catch (error) {
+    toast.error("Error sending return request:");
+    console.log(error)
+  }
+}}
+>Return</Button>
+                  </>
                 )}
                 <Button variant="text" size="small" onClick={() => handleShowMore(request)}>Show More</Button>
               </Box>
@@ -209,8 +304,10 @@ const Borrowals = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                 {isStaffOrAdmin && request.status === 'renewal pending' && (
                   <>
-                    <Button variant="contained" color="success" size="small" onClick={() => handleAcceptRenewal(request._id)}>Accept</Button>
-                    <Button variant="contained" color="error" size="small" onClick={() => handleRejectRenewal(request._id)}>Reject</Button>
+                    <Button variant="contained" color="success" size="small" 
+                    onClick={() => handleAcceptRenewal(request._id)}>Accept</Button>
+                    <Button variant="contained" color="error" size="small" 
+                    onClick={() => handleRejectRenewal(request._id)}>Reject</Button>
                   </>
                 )}
                 {isStudent && (
@@ -265,6 +362,7 @@ const Borrowals = () => {
         </Dialog>
       )}
     </Box>
+    </>
   );
 };
 

@@ -44,7 +44,7 @@ console.log(finalUserData)
                     "Content-Type": "application/json",
                 },
             });
-            console.log(response.data);
+           
             if(response.data.error){
                 setError(response.data.error)
             }
