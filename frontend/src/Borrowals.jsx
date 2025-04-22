@@ -11,6 +11,13 @@ import {
   DialogTitle,
   TextField
 } from '@mui/material';
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@mui/material';
 import axios from 'axios';
 import {toast} from 'react-toastify'
 const Borrowals = () => {
