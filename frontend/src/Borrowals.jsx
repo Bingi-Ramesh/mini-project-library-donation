@@ -204,8 +204,8 @@ const Borrowals = () => {
               <Button
                 onClick={async () => {
                   try {
-                    await axios.post(`${API_URL}/user/handle-renewal`, {
-                      borrowRequestId: req.id,
+                    await axios.post(`${API_URL}/user/request-renewal`, {
+                      borrowRequestId: req._id,
                       status: "return request accepted"
                     });
                     // Optionally refresh or update the state
@@ -222,8 +222,8 @@ const Borrowals = () => {
                 color="error"
                 onClick={async () => {
                   try {
-                    await axios.post(`${API_URL}/user/handle-renewal`, {
-                      borrowRequestId: req.id,
+                    await axios.post(`${API_URL}/user/request-renewal`, {
+                      borrowRequestId: req._id,
                       status: "return request rejected"
                     });
                     // Optionally refresh or update the state
