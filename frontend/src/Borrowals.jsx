@@ -60,7 +60,14 @@ const Borrowals = () => {
           const studentRequests = requests.filter(req => req.student._id === user._id);
           setPendingRequests(studentRequests.filter(req => req.status === 'pending'));
           setBorrowedRequests(studentRequests.filter(req => req.status === 'borrowed'));
-          setRenewalRequests(studentRequests.filter(req => req.status.includes('renewal')));
+          setRenewalRequests(
+            studentRequests.filter(
+              (req) =>
+                req.status.toLowerCase().includes("renewal") ||
+                req.status.toLowerCase().includes("return")
+            )
+          );
+          
         } else {
           setPendingRequests(requests.filter(req => req.status === 'pending'));
           setBorrowedRequests(requests.filter(req => req.status === 'borrowed'));
@@ -181,10 +188,10 @@ const Borrowals = () => {
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>Student Name</TableCell>
-          <TableCell>Book Name</TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Actions</TableCell>
+          <TableCell><strong>Student Name</strong></TableCell>
+          <TableCell><strong>Book Name</strong></TableCell>
+          <TableCell><strong>Status</strong></TableCell>
+          <TableCell><strong>Actions</strong></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -198,7 +205,7 @@ const Borrowals = () => {
                 onClick={async () => {
                   try {
                     await axios.post(`${API_URL}/user/request-renewal`, {
-                      requestId: req.id,
+                      borrowRequestId: req.id,
                       status: "return request accepted"
                     });
                     // Optionally refresh or update the state
@@ -215,7 +222,7 @@ const Borrowals = () => {
                 onClick={async () => {
                   try {
                     await axios.post(`${API_URL}/user/request-renewal`, {
-                      requestId: req.id,
+                      borrowRequestId: req.id,
                       status: "return request rejected"
                     });
                     // Optionally refresh or update the state
