@@ -45,12 +45,12 @@ const infoCards = [
 
 const teamMembers = [
   {
-    name: 'Alice Johnson',
+    name: 'Anjali',
     role: 'Lead Developer',
     image: member1,
   },
   {
-    name: 'David Kim',
+    name: 'Mahesh',
     role: 'Product Designer',
     image: member2,
   },

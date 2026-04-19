@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, Box, useMediaQuery } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
-import logo from './assets/logo.jpg';
+// import logo from './assets/logo.jpg';
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -110,10 +110,10 @@ const Navbar = () => {
         >
           {/* Logo and LMS Title */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="h6" sx={{ marginRight: 5, color: "#ffffff" }}>
-              LMS CONNECT
+            <Typography variant="h5" sx={{ marginRight: 5, color: "#ffffff" }}>
+              BookSphere
             </Typography>
-            <img src={logo} alt="Logo" style={{ height: 45, width: 85, borderRadius: 20 }} />
+            {/* <img src={logo} alt="Logo" style={{ height: 45, width: 85, borderRadius: 20 }} /> */}
           </Box>
 
           {/* For Mobile: Hamburger Menu */}

@@ -18,7 +18,7 @@ const Footer = () => {
       }}
     >
       <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
-        📚 Library Management System
+        📚 BookSphere
       </Typography>
 
       <Typography variant="body2" sx={{ mb: 2 }}>
@@ -61,7 +61,7 @@ const Footer = () => {
       </Stack>
 
       <Typography variant="caption" display="block">
-        © {new Date().getFullYear()} LMS. All rights reserved.
+        © {new Date().getFullYear()} BookSphere. All rights reserved.
       </Typography>
     </Box>
   );
