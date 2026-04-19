@@ -64,7 +64,7 @@ console.log(finalUserData)
                 });
             }
         } catch (error) {
-            setError("Network error, please try again.");
+            setError("Network error, please ensure your internet connection and try again.");
             console.log(error);
         } finally {
             setLoading(false);
