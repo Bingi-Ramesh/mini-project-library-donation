@@ -35,6 +35,7 @@ const Borrowals = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const isStaffOrAdmin = user && (user.userType === 'staff' || user.userType === 'admin');
   const isStudent = user && (user.userType === 'student' || user.userType === 'Student');
+  console.log(user)
   useEffect(() => {
     const fetchData = async () => {
       try {
