@@ -36,6 +36,7 @@ const Borrowals = () => {
   const isStaffOrAdmin = user && (user.userType === 'staff' || user.userType === 'admin');
   const isStudent = user && (user.userType === 'student' || user.userType === 'Student');
   console.log(user)
+  console.log(isStudent)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,7 +59,10 @@ const Borrowals = () => {
         const requests = response.data;
 
         if (isStudent) {
-          const studentRequests = requests.filter(req => req.student._id === user._id);
+          console.log(requests)
+          const studentRequests = requests.filter(
+            req => req.student?._id === user._id
+          );
           setPendingRequests(studentRequests.filter(req => req.status === 'pending'));
           setBorrowedRequests(studentRequests.filter(req => req.status === 'borrowed'));
           setRenewalRequests(
